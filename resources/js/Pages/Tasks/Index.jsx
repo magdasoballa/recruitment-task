@@ -32,7 +32,12 @@ export default function TaskList({ tasks }) {
     };
 
     const handleDelete = (taskId) => {
-        destroy(`/tasks/${taskId}`);
+        destroy(`/tasks/${taskId}`, {
+            onSuccess: () => {
+                setEditingTaskId(null);
+                setData({ title: "" });
+            }
+        });
     };
 
     const handleEdit = (task) => {
