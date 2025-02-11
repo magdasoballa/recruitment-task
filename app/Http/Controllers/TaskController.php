@@ -39,7 +39,7 @@ public function update(Request $request, Task $task)
         abort(403);  
     }
 
-    $task->completed = !$task->completed;
+    $task->title = $request->title; 
     $task->save();
 
     return redirect()->route('tasks.index');
@@ -57,4 +57,18 @@ public function destroy(Task $task)
     return redirect()->route('tasks.index');
 }
 
+public function toggleCompletion(Task $task)
+{
+    if ($task->user_id !== auth()->id()) {
+        abort(403);  
+    }
+
+    $task->completed = !$task->completed;
+    $task->save(); 
+    return redirect()->route('tasks.index');
 }
+
+
+}
+
+
