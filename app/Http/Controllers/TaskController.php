@@ -5,70 +5,67 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
     public function index()
     {
-        $tasks = auth()->user()->tasks; 
+        $tasks = Auth::user()->tasks; 
         return Inertia::render('Tasks/Index', [
             'tasks' => $tasks
         ]);
     }
 
     public function store(Request $request)
-{
-    if (auth()->check()) {
-        $request->validate([
-            'title' => 'required|string|max:255',
-        ]);
+    {
+        if (Auth::check()) {
+            $request->validate([
+                'title' => 'required|string|max:255',
+            ]);
 
-        auth()->user()->tasks()->create([
-            'title' => $request->title,
-        ]);
+            Auth::user()->tasks()->create([
+                'title' => $request->title,
+            ]);
+
+            return redirect()->route('tasks.index');
+        } else {
+            return redirect()->route('login');
+        }
+    }
+
+    public function update(Request $request, Task $task)
+    {
+        if ($task->user_id !== Auth::id()) {
+            abort(403);  
+        }
+
+        $task->title = $request->title; 
+        $task->save();
 
         return redirect()->route('tasks.index');
-    } else {
-        return redirect()->route('login');
-    }
-}
-
-public function update(Request $request, Task $task)
-{
-    if ($task->user_id !== auth()->id()) {
-        abort(403);  
     }
 
-    $task->title = $request->title; 
-    $task->save();
+    public function destroy(Task $task)
+    {
+        if ($task->user_id !== Auth::id()) {
+            abort(403);  
+        }
 
-    return redirect()->route('tasks.index');
-}
+        $task->delete();
 
-
-public function destroy(Task $task)
-{
-    if ($task->user_id !== auth()->id()) {
-        abort(403);  
+        return redirect()->route('tasks.index');
     }
 
-    $task->delete();
+    public function toggleCompletion(Task $task)
+    {
+        if ($task->user_id !== Auth::id()) {
+            abort(403);  
+        }
 
-    return redirect()->route('tasks.index');
-}
+        $task->completed = !$task->completed;
+        $task->save(); 
 
-public function toggleCompletion(Task $task)
-{
-    if ($task->user_id !== auth()->id()) {
-        abort(403);  
+        return redirect()->route('tasks.index');
     }
-
-    $task->completed = !$task->completed;
-    $task->save(); 
-    return redirect()->route('tasks.index');
 }
-
-
-}
-
-
