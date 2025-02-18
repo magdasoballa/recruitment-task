@@ -11,7 +11,7 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $tasks = Auth::user()->tasks; 
+        $tasks = Auth::user()->tasks()->with('comments')->get(); 
         return Inertia::render('Tasks/Index', [
             'tasks' => $tasks
         ]);
@@ -52,7 +52,9 @@ class TaskController extends Controller
             abort(403);  
         }
 
+        $task->comments()->delete();
         $task->delete();
+
 
         return redirect()->route('tasks.index');
     }

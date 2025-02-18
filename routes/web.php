@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\CommentController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -34,6 +35,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/login', function () {
         return Inertia::render('Auth/Login');
     })->name('login');
+    Route::post('/tasks/{task}/comments', [CommentController::class, 'store'])->name('tasks.comments.store');
+
 });
 
 require __DIR__.'/auth.php';
