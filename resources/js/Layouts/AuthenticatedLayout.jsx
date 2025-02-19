@@ -72,12 +72,18 @@ export default function AuthenticatedLayout({ header, children }) {
                                             Profil
                                         </Dropdown.Link>
                                         <Dropdown.Link
+                                            href={route("survey")}
+                                        >
+                                            Ankieta
+                                        </Dropdown.Link>
+                                        <Dropdown.Link
                                             href={route("logout")}
                                             method="post"
                                             as="button"
                                         >
                                             Wyloguj{" "}
                                         </Dropdown.Link>
+
                                     </Dropdown.Content>
                                 </Dropdown>
                             </div>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SurveyController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -36,6 +37,15 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Auth/Login');
     })->name('login');
     Route::post('/tasks/{task}/comments', [CommentController::class, 'store'])->name('tasks.comments.store');
+    Route::get('/survey', function () {
+        return Inertia::render('Survey');
+    })->name('survey');
+    Route::middleware('auth')->group(function () {
+        Route::get('/survey', [SurveyController::class, 'index'])->name('survey');
+        Route::post('/survey', [SurveyController::class, 'store'])->name('survey.store');
+    });
+    Route::get('/survey/{id}/edit', [SurveyController::class, 'edit'])->name('survey.edit');
+    Route::put('/survey/{id}', [SurveyController::class, 'update'])->name('survey.update');
 
 });
 
