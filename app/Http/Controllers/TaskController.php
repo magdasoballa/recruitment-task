@@ -11,11 +11,19 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $tasks = Auth::user()->tasks()->with('comments')->get(); 
+        $user = Auth::user();
+
+        if ($user->role === 'admin') {
+            $tasks = Task::with('comments')->get();
+        } else {
+            $tasks = $user->tasks()->with('comments')->get();
+        }
+
         return Inertia::render('Tasks/Index', [
             'tasks' => $tasks
         ]);
     }
+
 
     public function store(Request $request)
     {
@@ -37,10 +45,10 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         if ($task->user_id !== Auth::id()) {
-            abort(403);  
+            abort(403);
         }
 
-        $task->title = $request->title; 
+        $task->title = $request->title;
         $task->save();
 
         return redirect()->route('tasks.index');
@@ -49,7 +57,7 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         if ($task->user_id !== Auth::id()) {
-            abort(403);  
+            abort(403);
         }
 
         $task->comments()->delete();
@@ -62,11 +70,11 @@ class TaskController extends Controller
     public function toggleCompletion(Task $task)
     {
         if ($task->user_id !== Auth::id()) {
-            abort(403);  
+            abort(403);
         }
 
         $task->completed = !$task->completed;
-        $task->save(); 
+        $task->save();
 
         return redirect()->route('tasks.index');
     }

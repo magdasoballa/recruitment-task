@@ -7,7 +7,6 @@ import TaskDetail from "@/Pages/Tasks/TaskDetail";
 const TaskList = ({ tasks }) => {
     const { data, setData, post, patch } = useForm({ title: "" });
     const [editingTaskId, setEditingTaskId] = useState(null);
-
     const handleSubmit = (e) => {
         e.preventDefault();
         if (editingTaskId) {
@@ -51,8 +50,8 @@ const TaskList = ({ tasks }) => {
                         <TaskDetail
                             key={task.id}
                             task={task}
-                            setEditingTaskId={setEditingTaskId} 
-                            setData={setData} 
+                            setEditingTaskId={setEditingTaskId}
+                            setData={setData}
                         />
                     ))}
                 </ul>
