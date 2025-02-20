@@ -3,9 +3,9 @@ import { useForm } from '@inertiajs/react';
 
 const SurveyEdit = ({ survey }) => {
     const { data, setData, put, errors, processing } = useForm({
-        question1: survey.question1,
-        question2: survey.question2,
-        question3: survey.question3,
+        age: survey.age,
+        experieence: survey.experieence,
+        languages: survey.languages,
     });
 
     const handleSubmit = (e) => {
@@ -20,45 +20,45 @@ const SurveyEdit = ({ survey }) => {
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label htmlFor="question1" className="block text-lg font-medium text-gray-700">Pytanie 1</label>
+                    <label htmlFor="age" className="block text-lg font-medium text-gray-700">Pytanie 1</label>
                     <input
                         type="text"
-                        id="question1"
+                        id="age"
                         className="mt-2 w-full p-3 border rounded-lg"
-                        value={data.question1}
-                        name="question1"
-                        onChange={(e) => setData('question1', e.target.value)}
+                        value={data.age}
+                        name="age"
+                        onChange={(e) => setData('age', e.target.value)}
                         required
                     />
-                    {errors.question1 && <p className="text-red-500 text-sm">{errors.question1}</p>}
+                    {errors.age && <p className="text-red-500 text-sm">{errors.age}</p>}
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="question2" className="block text-lg font-medium text-gray-700">Pytanie 2</label>
+                    <label htmlFor="experieence" className="block text-lg font-medium text-gray-700">Pytanie 2</label>
                     <input
                         type="text"
-                        id="question2"
+                        id="experieence"
                         className="mt-2 w-full p-3 border rounded-lg"
-                        value={data.question2}
-                        name="question2"
-                        onChange={(e) => setData('question2', e.target.value)}
+                        value={data.experieence}
+                        name="experieence"
+                        onChange={(e) => setData('experieence', e.target.value)}
                         required
                     />
-                    {errors.question2 && <p className="text-red-500 text-sm">{errors.question2}</p>}
+                    {errors.experieence && <p className="text-red-500 text-sm">{errors.experieence}</p>}
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="question3" className="block text-lg font-medium text-gray-700">Pytanie 3</label>
+                    <label htmlFor="languages" className="block text-lg font-medium text-gray-700">Pytanie 3</label>
                     <input
                         type="text"
-                        id="question3"
+                        id="languages"
                         className="mt-2 w-full p-3 border rounded-lg"
-                        value={data.question3}
-                        name="question3"
-                        onChange={(e) => setData('question3', e.target.value)}
+                        value={data.languages}
+                        name="languages"
+                        onChange={(e) => setData('languages', e.target.value)}
                         required
                     />
-                    {errors.question3 && <p className="text-red-500 text-sm">{errors.question3}</p>}
+                    {errors.languages && <p className="text-red-500 text-sm">{errors.languages}</p>}
                 </div>
 
                 <button

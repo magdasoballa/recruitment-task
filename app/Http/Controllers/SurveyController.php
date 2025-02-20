@@ -25,19 +25,19 @@ class SurveyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'question1' => 'required|string',
-            'question2' => 'required|string',
-            'question3' => 'required|string',
+            'age' => 'required|string',
+            'experience' => 'required|string',
+            'languages' => 'required|string',
         ]);
 
         $survey = new Survey();
         $survey->user_id = auth()->id();
-        $survey->question1 = $request->input('question1');
-        $survey->question2 = $request->input('question2');
-        $survey->question3 = $request->input('question3');
+        $survey->age = $request->input('age');
+        $survey->experience = $request->input('experience');
+        $survey->languages = $request->input('languages');
         $survey->save();
 
-        return redirect()->route('survey.index')->with('success', 'Ankieta została zapisana.');
+        return redirect()->route('survey')->with('success', 'Ankieta została zapisana.');
     }
 
     public function edit($id)
@@ -56,9 +56,9 @@ class SurveyController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'question1' => 'required|string',
-            'question2' => 'required|string',
-            'question3' => 'required|string',
+            'age' => 'required|string',
+            'experience' => 'required|string',
+            'languages' => 'required|string',
         ]);
 
         $survey = Survey::findOrFail($id);
@@ -67,9 +67,9 @@ class SurveyController extends Controller
             abort(403, 'Nie masz dostępu do tej ankiety.');
         }
 
-        $survey->question1 = $request->input('question1');
-        $survey->question2 = $request->input('question2');
-        $survey->question3 = $request->input('question3');
+        $survey->age = $request->input('age');
+        $survey->experience = $request->input('experience');
+        $survey->languages = $request->input('languages');
         $survey->save();
 
         return redirect()->route('survey')->with('success', 'Ankieta została zaktualizowana.');

@@ -16,9 +16,9 @@ const SurveyCompleted = ({ survey }) => {
             <p>Dziękujemy za wypełnienie ankiety! Oto Twoje odpowiedzi:</p>
 
             <div>
-                <p><strong>Pytanie 1:</strong> {survey.question1}</p>
-                <p><strong>Pytanie 2:</strong> {survey.question2}</p>
-                <p><strong>Pytanie 3:</strong> {survey.question3}</p>
+                <p><strong>Pytanie 1:</strong> {survey.age}</p>
+                <p><strong>Pytanie 2:</strong> {survey.experience}</p>
+                <p><strong>Pytanie 3:</strong> {survey.languages}</p>
             </div>
 
             <div>

@@ -11,9 +11,9 @@ class Survey extends Model
 
     protected $fillable = [
         'user_id',
-        'question1',
-        'question2',
-        'question3',
+        'age',
+        'experience',
+        'languages',
     ];
 
     protected $guarded = [
