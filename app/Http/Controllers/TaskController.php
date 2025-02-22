@@ -43,8 +43,11 @@ class TaskController extends Controller
     }
 
     public function update(Request $request, Task $task)
+
     {
-        if ($task->user_id !== Auth::id()) {
+        $user = Auth::user();
+
+        if ($user->role !== 'admin' && $task->user_id !== $user->id) {
             abort(403);
         }
 
