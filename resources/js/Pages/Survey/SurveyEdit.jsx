@@ -2,30 +2,35 @@ import React, { useState } from 'react';
 import { useForm } from '@inertiajs/react';
 
 const SurveyEdit = ({ survey }) => {
-    const { data, setData, put, errors, processing } = useForm({
+    const { data, setData, put, errors, processing, clearErrors } = useForm({
         age: survey.age,
         experience: survey.experience,
         languages: survey.languages ? survey.languages.split(',') : [],
-
+        specialization: survey.specialization ? survey.specialization.split(',') : [],
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        data.languages = Array.isArray(data.languages) ? data.languages : [];
+        data.specialization = Array.isArray(data.specialization) ? data.specialization : [];
         data.languages = data.languages.join(',');
-
+        data.specialization = data.specialization.join(',');
         put(route('survey.update', survey.id));
     };
 
-    const handleLanguageChange = (e) => {
-        const { value, checked } = e.target;
-        let newLanguages = [...data.languages];
+    const handleCheckboxChange = (field, value, checked) => {
+        let newArray = [...data[field]];
         if (checked) {
-            newLanguages.push(value);
+            newArray.push(value);
         } else {
-            newLanguages = newLanguages.filter((lang) => lang !== value);
+            newArray = newArray.filter((item) => item !== value);
         }
-        setData('languages', newLanguages);
+        setData(field, newArray);
+        if (field === 'languages') {
+            if (newArray.length > 0) {
+                clearErrors('languages');
+            }
+        }
     };
 
     return (
@@ -36,46 +41,18 @@ const SurveyEdit = ({ survey }) => {
                 <div className="mb-4">
                     <label className="block text-lg font-medium text-gray-700">Pytanie 1: Podaj przedział wiekowy</label>
                     <div className="mt-2">
-                        <label className="inline-flex items-center mr-4">
-                            <input
-                                type="radio"
-                                value="18-25"
-                                checked={data.age === "18-25"}
-                                onChange={(e) => setData('age', e.target.value)}
-                                className="form-radio"
-                            />
-                            <span className="ml-2">18-25</span>
-                        </label>
-                        <label className="inline-flex items-center mr-4">
-                            <input
-                                type="radio"
-                                value="26-35"
-                                checked={data.age === "26-35"}
-                                onChange={(e) => setData('age', e.target.value)}
-                                className="form-radio"
-                            />
-                            <span className="ml-2">26-35</span>
-                        </label>
-                        <label className="inline-flex items-center mr-4">
-                            <input
-                                type="radio"
-                                value="36-50"
-                                checked={data.age === "36-50"}
-                                onChange={(e) => setData('age', e.target.value)}
-                                className="form-radio"
-                            />
-                            <span className="ml-2">36-50</span>
-                        </label>
-                        <label className="inline-flex items-center mr-4">
-                            <input
-                                type="radio"
-                                value="51-65"
-                                checked={data.age === "51-65"}
-                                onChange={(e) => setData('age', e.target.value)}
-                                className="form-radio"
-                            />
-                            <span className="ml-2">51-65</span>
-                        </label>
+                        {["18-25", "26-35", "36-50", "51-65"].map((age) => (
+                            <label key={age} className="inline-flex items-center mr-4">
+                                <input
+                                    type="radio"
+                                    value={age}
+                                    checked={data.age === age}
+                                    onChange={(e) => setData('age', e.target.value)}
+                                    className="form-radio"
+                                />
+                                <span className="ml-2">{age}</span>
+                            </label>
+                        ))}
                     </div>
                     {errors.age && <p className="text-red-500 text-sm">{errors.age}</p>}
                 </div>
@@ -83,46 +60,18 @@ const SurveyEdit = ({ survey }) => {
                 <div className="mb-4">
                     <label className="block text-lg font-medium text-gray-700">Pytanie 2: Lata doświadczenia</label>
                     <div className="mt-2">
-                        <label className="inline-flex items-center mr-4">
-                            <input
-                                type="radio"
-                                value="1-3"
-                                checked={data.experience === "1-3"}
-                                onChange={(e) => setData('experience', e.target.value)}
-                                className="form-radio"
-                            />
-                            <span className="ml-2">1-3</span>
-                        </label>
-                        <label className="inline-flex items-center mr-4">
-                            <input
-                                type="radio"
-                                value="3-5"
-                                checked={data.experience === "3-5"}
-                                onChange={(e) => setData('experience', e.target.value)}
-                                className="form-radio"
-                            />
-                            <span className="ml-2">3-5</span>
-                        </label>
-                        <label className="inline-flex items-center mr-4">
-                            <input
-                                type="radio"
-                                value="5-7"
-                                checked={data.experience === "5-7"}
-                                onChange={(e) => setData('experience', e.target.value)}
-                                className="form-radio"
-                            />
-                            <span className="ml-2">5-7</span>
-                        </label>
-                        <label className="inline-flex items-center mr-4">
-                            <input
-                                type="radio"
-                                value="7-10"
-                                checked={data.experience === "7-10"}
-                                onChange={(e) => setData('experience', e.target.value)}
-                                className="form-radio"
-                            />
-                            <span className="ml-2">7-10</span>
-                        </label>
+                        {["1-3", "3-5", "5-7", "7-10"].map((exp) => (
+                            <label key={exp} className="inline-flex items-center mr-4">
+                                <input
+                                    type="radio"
+                                    value={exp}
+                                    checked={data.experience === exp}
+                                    onChange={(e) => setData('experience', e.target.value)}
+                                    className="form-radio"
+                                />
+                                <span className="ml-2">{exp}</span>
+                            </label>
+                        ))}
                     </div>
                     {errors.experience && <p className="text-red-500 text-sm">{errors.experience}</p>}
                 </div>
@@ -130,38 +79,44 @@ const SurveyEdit = ({ survey }) => {
                 <div className="mb-4">
                     <label className="block text-lg font-medium text-gray-700">Pytanie 3: Języki</label>
                     <div className="mt-2">
-                        <label className="inline-flex items-center mr-4">
-                            <input
-                                type="checkbox"
-                                value="pl"
-                                checked={data.languages.includes("pl")}
-                                onChange={handleLanguageChange}
-                                className="form-checkbox"
-                            />
-                            <span className="ml-2">Polski</span>
-                        </label>
-                        <label className="inline-flex items-center mr-4">
-                            <input
-                                type="checkbox"
-                                value="eng"
-                                checked={data.languages.includes("eng")}
-                                onChange={handleLanguageChange}
-                                className="form-checkbox"
-                            />
-                            <span className="ml-2">Angielski</span>
-                        </label>
-                        <label className="inline-flex items-center mr-4">
-                            <input
-                                type="checkbox"
-                                value="de"
-                                checked={data.languages.includes("de")}
-                                onChange={handleLanguageChange}
-                                className="form-checkbox"
-                            />
-                            <span className="ml-2">Niemiecki</span>
-                        </label>
+                        {["pl", "eng", "de"].map((lang) => (
+                            <label key={lang} className="inline-flex items-center mr-4">
+                                <input
+                                    type="checkbox"
+                                    value={lang}
+                                    checked={data.languages.includes(lang)}
+                                    onChange={(e) => handleCheckboxChange('languages', lang, e.target.checked)}
+                                    className="form-checkbox"
+                                />
+                                <span className="ml-2">{lang === "pl" ? "Polski" : lang === "eng" ? "Angielski" : "Niemiecki"}</span>
+                            </label>
+                        ))}
                     </div>
                     {errors.languages && <p className="text-red-500 text-sm">{errors.languages}</p>}
+                </div>
+
+                <div className="mb-4">
+                    <label className="block text-lg font-medium text-gray-700">Pytanie 4: Specjalizacje</label>
+                    <div className="mt-2">
+                        {[
+                            { key: "nursing", label: "Pielęgniarstwo" },
+                            { key: "elder care", label: "Opieka nad osobami starszymi" },
+                            { key: "physiotherapy", label: "Fizjoterapia" },
+                            { key: "psychology", label: "Psychologia" },
+                        ].map((spec) => (
+                            <label key={spec.key} className="inline-flex items-center mr-4">
+                                <input
+                                    type="checkbox"
+                                    value={spec.key}
+                                    checked={data.specialization.includes(spec.key)}
+                                    onChange={(e) => handleCheckboxChange('specialization', spec.key, e.target.checked)}
+                                    className="form-checkbox"
+                                />
+                                <span className="ml-2">{spec.label}</span>
+                            </label>
+                        ))}
+                    </div>
+                    {errors.specialization && <p className="text-red-500 text-sm">{errors.specialization}</p>}
                 </div>
 
                 <button

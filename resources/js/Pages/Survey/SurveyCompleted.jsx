@@ -5,13 +5,13 @@ import {route} from "ziggy-js";
 
 const SurveyCompleted = ({ survey }) => {
     const [matchedCaregivers, setMatchedCaregivers] = useState([]);
-
     useEffect(() => {
 
         router.get(route('caregivers.index'), {
             languages: survey?.languages,
             experience: survey?.experience,
             age: survey?.age,
+            specialization: survey?.specialization
         }, {
             preserveState: true,
             onSuccess: (page) => {
@@ -35,6 +35,8 @@ const SurveyCompleted = ({ survey }) => {
                 <p><strong>Pytanie 1:</strong> {survey?.age}</p>
                 <p><strong>Pytanie 2:</strong> {survey?.experience}</p>
                 <p><strong>Pytanie 3:</strong> {survey?.languages}</p>
+                <p><strong>Pytanie 4:</strong> {survey?.specialization}</p>
+
 
             </div>
 

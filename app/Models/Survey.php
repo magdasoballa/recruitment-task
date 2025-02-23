@@ -19,6 +19,7 @@ class Survey extends Model
         'age',
         'experience',
         'languages',
+        'specialization'
     ];
 
     protected $guarded = [

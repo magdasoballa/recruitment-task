@@ -28,16 +28,21 @@ class SurveyController extends Controller
             'age' => 'required|string',
             'experience' => 'required|string',
             'languages' => 'required|array',
+            'specialization' => 'nullable|array'
         ]);
 
 
         $languages = implode(',', $request->input('languages'));
+
+        $specialization = implode(',', $request->input('specialization'));
 
         $survey = new Survey();
         $survey->user_id = auth()->id();
         $survey->age = $request->input('age');
         $survey->experience = $request->input('experience');
         $survey->languages = $languages;
+        $survey->specialization = $specialization;
+
         $survey->save();
 
         return redirect()->route('survey')->with('success', 'Ankieta została zapisana.');
@@ -62,6 +67,8 @@ class SurveyController extends Controller
             'age' => 'required|string',
             'experience' => 'required|string',
             'languages' => 'required|string',
+            'specialization' => 'nullable|string',
+
         ]);
 
         $survey = Survey::findOrFail($id);
@@ -73,6 +80,7 @@ class SurveyController extends Controller
         $survey->age = $request->input('age');
         $survey->experience = $request->input('experience');
         $survey->languages = $request->input('languages');
+        $survey->specialization = $request->input('specialization');
         $survey->save();
 
         return redirect()->route('survey')->with('success', 'Ankieta została zaktualizowana.');
