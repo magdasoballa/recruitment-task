@@ -5,13 +5,27 @@ const SurveyEdit = ({ survey }) => {
     const { data, setData, put, errors, processing } = useForm({
         age: survey.age,
         experience: survey.experience,
-        languages: survey.languages,
+        languages: survey.languages ? survey.languages.split(',') : [],
+
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        data.languages = data.languages.join(',');
+
         put(route('survey.update', survey.id));
+    };
+
+    const handleLanguageChange = (e) => {
+        const { value, checked } = e.target;
+        let newLanguages = [...data.languages];
+        if (checked) {
+            newLanguages.push(value);
+        } else {
+            newLanguages = newLanguages.filter((lang) => lang !== value);
+        }
+        setData('languages', newLanguages);
     };
 
     return (
@@ -118,31 +132,31 @@ const SurveyEdit = ({ survey }) => {
                     <div className="mt-2">
                         <label className="inline-flex items-center mr-4">
                             <input
-                                type="radio"
-                                value="eng"
-                                checked={data.languages === "eng"}
-                                onChange={(e) => setData('languages', e.target.value)}
-                                className="form-radio"
-                            />
-                            <span className="ml-2">Angielski</span>
-                        </label>
-                        <label className="inline-flex items-center mr-4">
-                            <input
-                                type="radio"
+                                type="checkbox"
                                 value="pl"
-                                checked={data.languages === "pl"}
-                                onChange={(e) => setData('languages', e.target.value)}
-                                className="form-radio"
+                                checked={data.languages.includes("pl")}
+                                onChange={handleLanguageChange}
+                                className="form-checkbox"
                             />
                             <span className="ml-2">Polski</span>
                         </label>
                         <label className="inline-flex items-center mr-4">
                             <input
-                                type="radio"
+                                type="checkbox"
+                                value="eng"
+                                checked={data.languages.includes("eng")}
+                                onChange={handleLanguageChange}
+                                className="form-checkbox"
+                            />
+                            <span className="ml-2">Angielski</span>
+                        </label>
+                        <label className="inline-flex items-center mr-4">
+                            <input
+                                type="checkbox"
                                 value="de"
-                                checked={data.languages === "de"}
-                                onChange={(e) => setData('languages', e.target.value)}
-                                className="form-radio"
+                                checked={data.languages.includes("de")}
+                                onChange={handleLanguageChange}
+                                className="form-checkbox"
                             />
                             <span className="ml-2">Niemiecki</span>
                         </label>

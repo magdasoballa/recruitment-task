@@ -32,7 +32,7 @@ class CaregiverController extends Controller
         if (!empty($languages)) {
             $query->where(function ($q) use ($languages) {
                 foreach ($languages as $language) {
-                    $q->orWhereRaw("caregivers.languages LIKE ?", ['%"' . $language . '%"']);
+                    $q->whereRaw("caregivers.languages LIKE ?", ['%"' . $language . '%"']);
                 }
             });
         }

@@ -6,17 +6,27 @@ const SurveyForm = () => {
     const { data, setData, post, processing, errors } = useForm({
         age: '',
         experience: '',
-        languages: '',
+        languages: [],
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        const languages = Array.isArray(data.languages) ? data.languages.join(',') : data.languages;
+
         post(route('survey.store'), {
             age: data.age,
             experience: data.experience,
-            languages: data.languages,
+            languages: languages,
         });
+    };
+
+
+    const handleLanguageChange = (e) => {
+        const value = e.target.value;
+        setData('languages', e.target.checked
+            ? [...data.languages, value]
+            : data.languages.filter(language => language !== value));
     };
 
     return (
@@ -130,31 +140,31 @@ const SurveyForm = () => {
                         <div className="mt-2">
                             <label className="inline-flex items-center mr-4">
                                 <input
-                                    type="radio"
+                                    type="checkbox"
                                     value="eng"
-                                    checked={data.languages === "eng"}
-                                    onChange={(e) => setData('languages', e.target.value)}
-                                    className="form-radio"
+                                    checked={data.languages.includes("eng")}
+                                    onChange={handleLanguageChange}
+                                    className="form-checkbox"
                                 />
                                 <span className="ml-2">Angielski</span>
                             </label>
                             <label className="inline-flex items-center mr-4">
                                 <input
-                                    type="radio"
+                                    type="checkbox"
                                     value="pl"
-                                    checked={data.languages === "pl"}
-                                    onChange={(e) => setData('languages', e.target.value)}
-                                    className="form-radio"
+                                    checked={data.languages.includes("pl")}
+                                    onChange={handleLanguageChange}
+                                    className="form-checkbox"
                                 />
                                 <span className="ml-2">Polski</span>
                             </label>
                             <label className="inline-flex items-center mr-4">
                                 <input
-                                    type="radio"
+                                    type="checkbox"
                                     value="de"
-                                    checked={data.languages === "de"}
-                                    onChange={(e) => setData('languages', e.target.value)}
-                                    className="form-radio"
+                                    checked={data.languages.includes("de")}
+                                    onChange={handleLanguageChange}
+                                    className="form-checkbox"
                                 />
                                 <span className="ml-2">Niemiecki</span>
                             </label>
@@ -180,5 +190,4 @@ const SurveyForm = () => {
         </AuthenticatedLayout>
     );
 };
-
-export default SurveyForm;
+export  default SurveyForm

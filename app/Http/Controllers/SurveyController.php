@@ -27,14 +27,17 @@ class SurveyController extends Controller
         $request->validate([
             'age' => 'required|string',
             'experience' => 'required|string',
-            'languages' => 'required|string',
+            'languages' => 'required|array',
         ]);
+
+
+        $languages = implode(',', $request->input('languages'));
 
         $survey = new Survey();
         $survey->user_id = auth()->id();
         $survey->age = $request->input('age');
         $survey->experience = $request->input('experience');
-        $survey->languages = $request->input('languages');
+        $survey->languages = $languages;
         $survey->save();
 
         return redirect()->route('survey')->with('success', 'Ankieta została zapisana.');
